@@ -1,10 +1,32 @@
 const User = require('../models/User');
 const CustomError = require('../errors');
 const { StatusCodes } = require('http-status-codes');
-const { attachCookiesToResponse} = require("../utils")
+const { attachCookiesToResponse } = require("../utils")
 
-const login = (req, res) => {
-    res.send("login");
+const login = async (req, res) => {
+
+    const { email, password } = req.body;
+
+    if(!email || !password) {
+        throw new CustomError.BadRequestError("Invalid Username or Password!");
+    }
+
+    const user = await User.findOne({email});
+
+    if(!user) {
+        throw new CustomError.BadRequestError("Invalid Username or Password!");
+    }
+
+    const checkPassword = await user.verifyPassword(password);
+
+
+    if(!checkPassword) {
+        throw new CustomError.BadRequestError("Invalid Username or Password!");
+    }
+
+    await attachCookiesToResponse({res, tokenUser:user})
+
+    return res.status(StatusCodes.OK).json({user})
 }
 
 const register = async (req, res) => {
@@ -33,7 +55,12 @@ const register = async (req, res) => {
 }
 
 const logout = (req, res) => {
-    res.send("logout")
+    
+    res.cookie("token", "", {
+        expires: new Date(Date.now()),
+    }).status(StatusCodes.OK).json({
+        msg: "Logout!"
+    })
 }
 
 module.exports = {
