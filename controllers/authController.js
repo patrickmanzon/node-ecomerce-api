@@ -24,7 +24,10 @@ const login = async (req, res) => {
         throw new CustomError.BadRequestError("Invalid Username or Password!");
     }
 
-    await attachCookiesToResponse({res, tokenUser:user})
+    await attachCookiesToResponse({res, tokenUser: {
+        name: user.name,
+        userId: user._id
+    }})
 
     return res.status(StatusCodes.OK).json({user})
 }
@@ -32,6 +35,10 @@ const login = async (req, res) => {
 const register = async (req, res) => {
     
     const { name, email, password } = req.body;
+
+    if(!name || !email || !password) {
+        throw new CustomError.BadRequestError("email, nmae, password already in required.");
+    }
 
     const emailChecker = await User.findOne({email});
     
