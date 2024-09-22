@@ -17,7 +17,7 @@ const updateUserPassword = (req, res) => {
 
 const getCurrentUser = (req, res) => {
     res.json({msg: "getCurrentUser"});
-}
+} 
 
 module.exports = {
     getAllUser,
