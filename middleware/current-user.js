@@ -6,7 +6,7 @@ const permissions = (...permissions) => {
 
         const { user } = req;
 
-        const { userId }
+        const { userId } = req.user;
  
         if(!permissions.includes(user.role)) {
             throw new APIError.ForbiddenError("unauthorized");
