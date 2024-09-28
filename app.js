@@ -4,11 +4,14 @@ require("express-async-errors");
 const express = require("express");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser")
+const fileExpressUploaded = require('express-fileupload');
 
 const app = express();
 
 app.use(morgan("tiny"));
 app.use(cookieParser(process.env.JWT_KEY));
+app.use(fileExpressUploaded());
+
 // db
 const connectDB = require('./db/connect');
 
@@ -16,12 +19,15 @@ const connectDB = require('./db/connect');
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const notFoundMiddleware = require("./middleware/not-found");
 app.use(express.json());
+app.use(express.static('public'));
 // routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/users", userRoutes)
+app.use("/api/v1/products", productRoutes)
 
 
 app.use(notFoundMiddleware);
