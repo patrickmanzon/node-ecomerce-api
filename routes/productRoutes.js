@@ -4,7 +4,8 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    uploadImage 
+    uploadImage, 
+    getProductReviews
 } = require("../controllers/productController");
 
 const permissions = require("../middleware/permissions");
@@ -19,6 +20,9 @@ router.get("/:productId", getSingleProduct);
 router.patch("/:productId", [auth, permissions("admin")], updateProduct);
 router.delete("/:productId", [auth, permissions("admin")], deleteProduct);
 router.post("/upload", [auth, permissions("admin")], uploadImage);
+
+router.get("/:productId/reviews", getProductReviews);
+
 
 module.exports = router
 

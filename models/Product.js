@@ -54,11 +54,16 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    numberOfReviews: {
+        type: Number,
+        default: 0
+    },
     user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: [true, "User id is required"]
     },
+    
     
 }, { timestamps: true });
 

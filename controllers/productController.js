@@ -2,6 +2,7 @@ const Product = require("../models/Product");
 const { StatusCodes } = require("http-status-codes")
 const APIError = require('../errors');
 const path = require('path');
+const Review = require("../models/Review");
 
 
 const getAllProducts = async (req, res) => {
@@ -70,6 +71,22 @@ const uploadImage = async (req, res) => {
     return res.status(StatusCodes.CREATED).json({src: 'public/uploads/'+image.name});
 }
 
+const getProductReviews = async (req, res) => {
+    
+    const {productId} = req.params;
+
+    const productExists = await Product.findOne({_id:productId});
+
+    if(!productExists) {
+        throw new APIError.NotFoundError("product not found!");
+    }
+
+    const reviews = await Review.find({product: productId });
+
+    return res.status(StatusCodes.OK).json({reviews});
+
+}
+
 module.exports = {
     getAllProducts,
     getSingleProduct,
@@ -77,4 +94,5 @@ module.exports = {
     updateProduct,
     deleteProduct,
     uploadImage,
+    getProductReviews
 }

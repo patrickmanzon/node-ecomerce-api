@@ -24,10 +24,12 @@ app.use(express.static('public'));
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const productRoutes = require("./routes/productRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/users", userRoutes)
 app.use("/api/v1/products", productRoutes)
+app.use("/api/v1/reviews", reviewRoutes)
 
 
 app.use(notFoundMiddleware);
