@@ -7,8 +7,8 @@ const auth = require("../middleware/authentication");
 router.get("", getAllReview);
 router.post("/", [auth],createReview);
 router.get("/:reviewId", getSingleReview);
-router.patch("/:reviewId", updateReview);
-router.delete("/:reviewId", deleteReview);
+router.patch("/:reviewId", [auth], updateReview);
+router.delete("/:reviewId", [auth], deleteReview);
 
 
 module.exports = router;

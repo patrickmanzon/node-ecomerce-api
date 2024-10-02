@@ -1,7 +1,7 @@
 const { StatusCodes } = require("http-status-codes");
 const User = require("../models/User");
 const APIError = require("../errors");
-
+const {checkCreator} = require("../utils");
 
 
 const getAllUser = async (req, res) => {
@@ -34,10 +34,13 @@ const updateUser = async (req, res) => {
 
     const user = await User.findOne({_id: userId});
 
+    
     if(!user) {
         throw new APIError.NotFoundError("user not found");
     }
- 
+    
+    checkCreator(req.user, userId) 
+    
     user.name = name;
     user.email = email;
     user.save();
@@ -51,11 +54,14 @@ const updateUserPassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
 
     const user = await User.findOne({_id: userId});
-
+    
+    
     if(!user) {
         throw new APIError.NotFoundError("user not found");
     }
 
+    checkCreator(req.user, userId) 
+    
     const passwordChecker = await user.verifyPassword(oldPassword);
 
     if(!passwordChecker) {

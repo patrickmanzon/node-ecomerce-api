@@ -3,6 +3,7 @@ const { StatusCodes } = require("http-status-codes")
 const APIError = require('../errors');
 const path = require('path');
 const Review = require("../models/Review");
+const {checkCreator} = require("../utils")
 
 
 const getAllProducts = async (req, res) => {
@@ -39,6 +40,8 @@ const updateProduct = async (req, res) => {
 
     const {productId} = req.params;
 
+    const checkProduct = await Product.find({_id: productId});
+
     const product = await Product.findOneAndUpdate({_id: productId}, req.body,  { new: true, runValidators: true });
 
     if(!product) {
@@ -49,6 +52,7 @@ const updateProduct = async (req, res) => {
 }
 
 const deleteProduct = async (req, res) => {
+
     const {productId} = req.params;
 
     const product = await Product.findOneAndDelete({_id: productId});

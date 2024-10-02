@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/Product");
 const APIError = require("../errors");
 const Review = require("../models/Review");
-
+const {checkCreator} = require("../utils");
 
 
 
@@ -45,6 +45,8 @@ const updateReview = async (req, res) => {
         throw new APIError.NotFoundError("review not found!");
     }
 
+    checkCreator(req.user, review.user) 
+
     review.title = title;
     review.comment = comment;
     review.rating = rating;
@@ -85,6 +87,8 @@ const deleteReview = async (req, res) => {
     if(!review) {
         throw new APIError.NotFoundError("review not found!");
     }
+
+    checkCreator(req.user, review.user) 
 
     review.remove();
 
